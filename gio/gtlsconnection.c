@@ -113,9 +113,7 @@ g_tls_connection_class_init (GTlsConnectionClass *klass)
    * Since: 2.28
    */
   g_object_class_install_property (gobject_class, PROP_BASE_IO_STREAM,
-				   g_param_spec_object ("base-io-stream",
-							P_("Base IOStream"),
-							P_("The GIOStream that the connection wraps"),
+				   g_param_spec_object ("base-io-stream", NULL, NULL,
 							G_TYPE_IO_STREAM,
 							G_PARAM_READWRITE |
 							G_PARAM_CONSTRUCT_ONLY |
@@ -130,9 +128,7 @@ g_tls_connection_class_init (GTlsConnectionClass *klass)
    * Deprecated: 2.30: Use GTlsConnection:database instead
    */
   g_object_class_install_property (gobject_class, PROP_USE_SYSTEM_CERTDB,
-				   g_param_spec_boolean ("use-system-certdb",
-							 P_("Use system certificate database"),
-							 P_("Whether to verify peer certificates against the system certificate database"),
+				   g_param_spec_boolean ("use-system-certdb", NULL, NULL,
 							 TRUE,
 							 G_PARAM_READWRITE |
 							 G_PARAM_CONSTRUCT |
@@ -161,9 +157,7 @@ g_tls_connection_class_init (GTlsConnectionClass *klass)
    * Since: 2.30
    */
   g_object_class_install_property (gobject_class, PROP_DATABASE,
-				   g_param_spec_object ("database",
-							 P_("Database"),
-							 P_("Certificate database to use for looking up or verifying certificates"),
+				   g_param_spec_object ("database", NULL, NULL,
 							 G_TYPE_TLS_DATABASE,
 							 G_PARAM_READWRITE |
 							 G_PARAM_STATIC_STRINGS));
@@ -177,9 +171,7 @@ g_tls_connection_class_init (GTlsConnectionClass *klass)
    * Since: 2.30
    */
   g_object_class_install_property (gobject_class, PROP_INTERACTION,
-                                   g_param_spec_object ("interaction",
-                                                        P_("Interaction"),
-                                                        P_("Optional object for user interaction"),
+                                   g_param_spec_object ("interaction", NULL, NULL,
                                                         G_TYPE_TLS_INTERACTION,
                                                         G_PARAM_READWRITE |
                                                         G_PARAM_STATIC_STRINGS));
@@ -192,9 +184,7 @@ g_tls_connection_class_init (GTlsConnectionClass *klass)
    * Since: 2.28
    */
   g_object_class_install_property (gobject_class, PROP_REQUIRE_CLOSE_NOTIFY,
-				   g_param_spec_boolean ("require-close-notify",
-							 P_("Require close notify"),
-							 P_("Whether to require proper TLS close notification"),
+				   g_param_spec_boolean ("require-close-notify", NULL, NULL,
 							 TRUE,
 							 G_PARAM_READWRITE |
 							 G_PARAM_CONSTRUCT |
@@ -210,9 +200,7 @@ g_tls_connection_class_init (GTlsConnectionClass *klass)
    * Deprecated: 2.60: The rehandshake mode is ignored.
    */
   g_object_class_install_property (gobject_class, PROP_REHANDSHAKE_MODE,
-				   g_param_spec_enum ("rehandshake-mode",
-						      P_("Rehandshake mode"),
-						      P_("When to allow rehandshaking"),
+				   g_param_spec_enum ("rehandshake-mode", NULL, NULL,
 						      G_TYPE_TLS_REHANDSHAKE_MODE,
 						      G_TLS_REHANDSHAKE_SAFELY,
 						      G_PARAM_READWRITE |
@@ -228,9 +216,7 @@ g_tls_connection_class_init (GTlsConnectionClass *klass)
    * Since: 2.28
    */
   g_object_class_install_property (gobject_class, PROP_CERTIFICATE,
-				   g_param_spec_object ("certificate",
-							P_("Certificate"),
-							P_("The connection’s certificate"),
+				   g_param_spec_object ("certificate", NULL, NULL,
 							G_TYPE_TLS_CERTIFICATE,
 							G_PARAM_READWRITE |
 							G_PARAM_STATIC_STRINGS));
@@ -247,9 +233,7 @@ g_tls_connection_class_init (GTlsConnectionClass *klass)
    * Since: 2.28
    */
   g_object_class_install_property (gobject_class, PROP_PEER_CERTIFICATE,
-				   g_param_spec_object ("peer-certificate",
-							P_("Peer Certificate"),
-							P_("The connection’s peer’s certificate"),
+				   g_param_spec_object ("peer-certificate", NULL, NULL,
 							G_TYPE_TLS_CERTIFICATE,
 							G_PARAM_READABLE |
 							G_PARAM_STATIC_STRINGS));
@@ -274,9 +258,7 @@ g_tls_connection_class_init (GTlsConnectionClass *klass)
    * Since: 2.28
    */
   g_object_class_install_property (gobject_class, PROP_PEER_CERTIFICATE_ERRORS,
-				   g_param_spec_flags ("peer-certificate-errors",
-						       P_("Peer Certificate Errors"),
-						       P_("Errors found with the peer’s certificate"),
+				   g_param_spec_flags ("peer-certificate-errors", NULL, NULL,
 						       G_TYPE_TLS_CERTIFICATE_FLAGS,
 						       0,
 						       G_PARAM_READABLE |
@@ -291,9 +273,7 @@ g_tls_connection_class_init (GTlsConnectionClass *klass)
    * Since: 2.60
    */
   g_object_class_install_property (gobject_class, PROP_ADVERTISED_PROTOCOLS,
-                                   g_param_spec_boxed ("advertised-protocols",
-                                                       P_("Advertised Protocols"),
-                                                       P_("Application-layer protocols available on this connection"),
+                                   g_param_spec_boxed ("advertised-protocols", NULL, NULL,
                                                        G_TYPE_STRV,
                                                        G_PARAM_READWRITE |
                                                        G_PARAM_STATIC_STRINGS));
@@ -306,9 +286,7 @@ g_tls_connection_class_init (GTlsConnectionClass *klass)
    * Since: 2.60
    */
   g_object_class_install_property (gobject_class, PROP_NEGOTIATED_PROTOCOL,
-                                   g_param_spec_string ("negotiated-protocol",
-                                                        P_("Negotiated Protocol"),
-                                                        P_("Application-layer protocol negotiated for this connection"),
+                                   g_param_spec_string ("negotiated-protocol", NULL, NULL,
                                                         NULL,
                                                         G_PARAM_READABLE |
                                                         G_PARAM_STATIC_STRINGS));
@@ -321,9 +299,7 @@ g_tls_connection_class_init (GTlsConnectionClass *klass)
    * Since: 2.70
    */
   g_object_class_install_property (gobject_class, PROP_PROTOCOL_VERSION,
-                                   g_param_spec_enum ("protocol-version",
-                                                      P_("Protocol Version"),
-                                                      P_("TLS protocol version negotiated for this connection"),
+                                   g_param_spec_enum ("protocol-version", NULL, NULL,
                                                       G_TYPE_TLS_PROTOCOL_VERSION,
                                                       G_TLS_PROTOCOL_VERSION_UNKNOWN,
                                                       G_PARAM_READABLE |
@@ -337,9 +313,7 @@ g_tls_connection_class_init (GTlsConnectionClass *klass)
    * Since: 2.70
    */
   g_object_class_install_property (gobject_class, PROP_CIPHERSUITE_NAME,
-                                   g_param_spec_string ("ciphersuite-name",
-                                                        P_("Ciphersuite Name"),
-                                                        P_("Name of ciphersuite negotiated for this connection"),
+                                   g_param_spec_string ("ciphersuite-name", NULL, NULL,
                                                         NULL,
                                                         G_PARAM_READABLE |
                                                         G_PARAM_STATIC_STRINGS));

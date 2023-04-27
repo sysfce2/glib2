@@ -158,9 +158,7 @@ g_socket_listener_class_init (GSocketListenerClass *klass)
   gobject_class->set_property = g_socket_listener_set_property;
   gobject_class->get_property = g_socket_listener_get_property;
   g_object_class_install_property (gobject_class, PROP_LISTEN_BACKLOG,
-                                   g_param_spec_int ("listen-backlog",
-                                                     P_("Listen backlog"),
-                                                     P_("outstanding connections in the listen queue"),
+                                   g_param_spec_int ("listen-backlog", NULL, NULL,
                                                      0,
                                                      2000,
                                                      10,

@@ -173,22 +173,16 @@ g_io_stream_class_init (GIOStreamClass *klass)
   klass->close_finish = g_io_stream_real_close_finish;
 
   g_object_class_install_property (gobject_class, PROP_CLOSED,
-                                   g_param_spec_boolean ("closed",
-                                                         P_("Closed"),
-                                                         P_("Is the stream closed"),
+                                   g_param_spec_boolean ("closed", NULL, NULL,
                                                          FALSE,
                                                          G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
 
   g_object_class_install_property (gobject_class, PROP_INPUT_STREAM,
-				   g_param_spec_object ("input-stream",
-							P_("Input stream"),
-							P_("The GInputStream to read from"),
+				   g_param_spec_object ("input-stream", NULL, NULL,
 							G_TYPE_INPUT_STREAM,
 							G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
   g_object_class_install_property (gobject_class, PROP_OUTPUT_STREAM,
-				   g_param_spec_object ("output-stream",
-							P_("Output stream"),
-							P_("The GOutputStream to write to"),
+				   g_param_spec_object ("output-stream", NULL, NULL,
 							G_TYPE_OUTPUT_STREAM,
 							G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
 }

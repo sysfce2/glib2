@@ -192,16 +192,12 @@ g_file_monitor_class_init (GFileMonitorClass *klass)
                               _g_cclosure_marshal_VOID__OBJECT_OBJECT_ENUMv);
 
   g_object_class_install_property (object_class, PROP_RATE_LIMIT,
-                                   g_param_spec_int ("rate-limit",
-                                                     P_("Rate limit"),
-                                                     P_("The limit of the monitor to watch for changes, in milliseconds"),
+                                   g_param_spec_int ("rate-limit", NULL, NULL,
                                                      0, G_MAXINT, DEFAULT_RATE_LIMIT_MSECS, G_PARAM_READWRITE |
                                                      G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS));
 
   g_object_class_install_property (object_class, PROP_CANCELLED,
-                                   g_param_spec_boolean ("cancelled",
-                                                         P_("Cancelled"),
-                                                         P_("Whether the monitor has been cancelled"),
+                                   g_param_spec_boolean ("cancelled", NULL, NULL,
                                                          FALSE, G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
 }
 

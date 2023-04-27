@@ -127,9 +127,7 @@ g_emblemed_icon_class_init (GEmblemedIconClass *klass)
   gobject_class->get_property = g_emblemed_icon_get_property;
 
   properties[PROP_GICON] =
-    g_param_spec_object ("gicon",
-                         P_("The base GIcon"),
-                         P_("The GIcon to attach emblems to"),
+    g_param_spec_object ("gicon", NULL, NULL,
                          G_TYPE_ICON,
                          G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS);
 
