@@ -262,23 +262,6 @@ g_spawn_async (const gchar          *working_directory,
                                    error);
 }
 
-/* Avoids a danger in threaded situations (calling close()
- * on a file descriptor twice, and another thread has
- * re-opened it since the first close)
- *
- * This function is called between fork() and exec() and hence must be
- * async-signal-safe (see signal-safety(7)).
- */
-static void
-close_and_invalidate (gint *fd)
-{
-  if (*fd < 0)
-    return;
-
-  g_close (*fd, NULL);
-  *fd = -1;
-}
-
 /* Some versions of OS X define READ_OK in public headers */
 #undef READ_OK
 
@@ -482,8 +465,7 @@ g_spawn_sync (const gchar          *working_directory,
               failed = TRUE;
               break;
             case READ_EOF:
-              close_and_invalidate (&outpipe);
-              outpipe = -1;
+              g_clear_fd (&outpipe, NULL);
               break;
             default:
               break;
@@ -501,8 +483,7 @@ g_spawn_sync (const gchar          *working_directory,
               failed = TRUE;
               break;
             case READ_EOF:
-              close_and_invalidate (&errpipe);
-              errpipe = -1;
+              g_clear_fd (&errpipe, NULL);
               break;
             default:
               break;
@@ -514,12 +495,9 @@ g_spawn_sync (const gchar          *working_directory,
     }
 
   /* These should only be open still if we had an error.  */
-  
-  if (outpipe >= 0)
-    close_and_invalidate (&outpipe);
-  if (errpipe >= 0)
-    close_and_invalidate (&errpipe);
-  
+  g_clear_fd (&outpipe, NULL);
+  g_clear_fd (&errpipe, NULL);
+
   /* Wait for child to exit, even if we have
    * an error pending.
    */
@@ -1810,7 +1788,7 @@ do_exec (gint                  child_err_report_fd,
       if (safe_dup2 (read_null, 0) < 0)
         write_err_and_exit (child_err_report_fd,
                             CHILD_DUPFD_FAILED);
-      close_and_invalidate (&read_null);
+      g_clear_fd (&read_null, NULL);
     }
 
   /* Like with stdin above, it's possible the caller assigned
@@ -1847,7 +1825,7 @@ do_exec (gint                  child_err_report_fd,
       if (safe_dup2 (write_null, 1) < 0)
         write_err_and_exit (child_err_report_fd,
                             CHILD_DUPFD_FAILED);
-      close_and_invalidate (&write_null);
+      g_clear_fd (&write_null, NULL);
     }
 
   if (IS_STD_FILENO (stderr_fd) && stderr_fd != STDERR_FILENO)
@@ -1879,7 +1857,7 @@ do_exec (gint                  child_err_report_fd,
       if (safe_dup2 (write_null, 2) < 0)
         write_err_and_exit (child_err_report_fd,
                             CHILD_DUPFD_FAILED);
-      close_and_invalidate (&write_null);
+      g_clear_fd (&write_null, NULL);
     }
 
   /* Close all file descriptors but stdin, stdout and stderr, and any of source_fds,
@@ -1970,7 +1948,7 @@ do_exec (gint                  child_err_report_fd,
               if (safe_dup2 (source_fds[i], target_fds[i]) < 0)
                 write_err_and_exit (child_err_report_fd, CHILD_DUPFD_FAILED);
 
-              close_and_invalidate (&source_fds[i]);
+              g_clear_fd (&source_fds[i], NULL);
             }
         }
     }
@@ -2260,12 +2238,12 @@ do_posix_spawn (const gchar * const *argv,
 
 out_close_fds:
   for (i = 0; i < num_parent_close_fds; i++)
-    close_and_invalidate (&parent_close_fds [i]);
+    g_clear_fd (&parent_close_fds[i], NULL);
 
   if (duped_source_fds != NULL)
     {
       for (i = 0; i < n_fds; i++)
-        close_and_invalidate (&duped_source_fds[i]);
+        g_clear_fd (&duped_source_fds[i], NULL);
       g_free (duped_source_fds);
     }
 
@@ -2548,13 +2526,13 @@ fork_exec (gboolean              intermediate_child,
        * not needed in the close_descriptors case,
        * though
        */
-      close_and_invalidate (&child_err_report_pipe[0]);
-      close_and_invalidate (&child_pid_report_pipe[0]);
+      g_clear_fd (&child_err_report_pipe[0], NULL);
+      g_clear_fd (&child_pid_report_pipe[0], NULL);
       if (child_close_fds[0] != -1)
         {
            int i = -1;
            while (child_close_fds[++i] != -1)
-             close_and_invalidate (&child_close_fds[i]);
+             g_clear_fd (&child_close_fds[i], NULL);
         }
       
       if (intermediate_child)
@@ -2579,7 +2557,7 @@ fork_exec (gboolean              intermediate_child,
             }
           else if (grandchild_pid == 0)
             {
-              close_and_invalidate (&child_pid_report_pipe[1]);
+              g_clear_fd (&child_pid_report_pipe[1], NULL);
               do_exec (child_err_report_pipe[1],
                        stdin_fd,
                        stdout_fd,
@@ -2606,7 +2584,7 @@ fork_exec (gboolean              intermediate_child,
           else
             {
               write_all (child_pid_report_pipe[1], &grandchild_pid, sizeof(grandchild_pid));
-              close_and_invalidate (&child_pid_report_pipe[1]);
+              g_clear_fd (&child_pid_report_pipe[1], NULL);
               
               _exit (0);
             }
@@ -2648,8 +2626,8 @@ fork_exec (gboolean              intermediate_child,
       gint n_ints = 0;    
 
       /* Close the uncared-about ends of the pipes */
-      close_and_invalidate (&child_err_report_pipe[1]);
-      close_and_invalidate (&child_pid_report_pipe[1]);
+      g_clear_fd (&child_err_report_pipe[1], NULL);
+      g_clear_fd (&child_pid_report_pipe[1], NULL);
 
       /* If we had an intermediate child, reap it */
       if (intermediate_child)
@@ -2771,8 +2749,8 @@ fork_exec (gboolean              intermediate_child,
         }
       
       /* Success against all odds! return the information */
-      close_and_invalidate (&child_err_report_pipe[0]);
-      close_and_invalidate (&child_pid_report_pipe[0]);
+      g_clear_fd (&child_err_report_pipe[0], NULL);
+      g_clear_fd (&child_pid_report_pipe[0], NULL);
 
       g_free (search_path_buffer_heap);
       g_free (argv_buffer_heap);
@@ -2786,9 +2764,9 @@ fork_exec (gboolean              intermediate_child,
 
 success:
   /* Close the uncared-about ends of the pipes */
-  close_and_invalidate (&stdin_pipe[0]);
-  close_and_invalidate (&stdout_pipe[1]);
-  close_and_invalidate (&stderr_pipe[1]);
+  g_clear_fd (&stdin_pipe[0], NULL);
+  g_clear_fd (&stdout_pipe[1], NULL);
+  g_clear_fd (&stderr_pipe[1], NULL);
 
   if (stdin_pipe_out != NULL)
     *stdin_pipe_out = g_steal_fd (&stdin_pipe[1]);
@@ -2821,17 +2799,17 @@ success:
        }
    }
 
-  close_and_invalidate (&stdin_pipe[0]);
-  close_and_invalidate (&stdin_pipe[1]);
-  close_and_invalidate (&stdout_pipe[0]);
-  close_and_invalidate (&stdout_pipe[1]);
-  close_and_invalidate (&stderr_pipe[0]);
-  close_and_invalidate (&stderr_pipe[1]);
+  g_clear_fd (&stdin_pipe[0], NULL);
+  g_clear_fd (&stdin_pipe[1], NULL);
+  g_clear_fd (&stdout_pipe[0], NULL);
+  g_clear_fd (&stdout_pipe[1], NULL);
+  g_clear_fd (&stderr_pipe[0], NULL);
+  g_clear_fd (&stderr_pipe[1], NULL);
 
-  close_and_invalidate (&child_err_report_pipe[0]);
-  close_and_invalidate (&child_err_report_pipe[1]);
-  close_and_invalidate (&child_pid_report_pipe[0]);
-  close_and_invalidate (&child_pid_report_pipe[1]);
+  g_clear_fd (&child_err_report_pipe[0], NULL);
+  g_clear_fd (&child_err_report_pipe[1], NULL);
+  g_clear_fd (&child_pid_report_pipe[0], NULL);
+  g_clear_fd (&child_pid_report_pipe[1], NULL);
 
   g_clear_pointer (&search_path_buffer_heap, g_free);
   g_clear_pointer (&argv_buffer_heap, g_free);
