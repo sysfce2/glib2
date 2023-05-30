@@ -1,5 +1,6 @@
 /* glib-unix.h - Unix specific integration
  * Copyright (C) 2011 Red Hat, Inc.
+ * Copyright 2023 Collabora Ltd.
  *
  * SPDX-License-Identifier: LGPL-2.1-or-later
  *
@@ -33,6 +34,7 @@
 #include <fcntl.h>
 
 #include <glib.h>
+#include <gstdio.h>
 
 #ifndef G_OS_UNIX
 #error "This header may only be used on UNIX"
@@ -119,6 +121,81 @@ guint    g_unix_fd_add             (gint              fd,
 GLIB_AVAILABLE_IN_2_64
 struct passwd *g_unix_get_passwd_entry (const gchar  *user_name,
                                         GError      **error);
+
+typedef struct
+{
+  int fds[2];
+} GUnixPipe GLIB_AVAILABLE_TYPE_IN_2_78;
+
+typedef enum
+{
+  G_UNIX_PIPE_END_READ = 0,
+  G_UNIX_PIPE_END_WRITE = 1
+} GUnixPipeEnd GLIB_AVAILABLE_TYPE_IN_2_78;
+
+#define G_UNIX_PIPE_INIT { { -1, -1 } } GLIB_AVAILABLE_MACRO_IN_2_78
+
+/* Suppress "Not available before" warnings when declaring the
+ * implementations */
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
+
+GLIB_AVAILABLE_STATIC_INLINE_IN_2_78
+static inline gboolean
+g_unix_pipe_open (GUnixPipe *self,
+                  int flags,
+                  GError **error)
+{
+  return g_unix_open_pipe (self->fds, flags, error);
+}
+
+GLIB_AVAILABLE_STATIC_INLINE_IN_2_78
+static inline int
+g_unix_pipe_get (GUnixPipe *self,
+                 GUnixPipeEnd end)
+{
+  return self->fds[end];
+}
+
+GLIB_AVAILABLE_STATIC_INLINE_IN_2_78
+static inline int
+g_unix_pipe_steal (GUnixPipe *self,
+                   GUnixPipeEnd end)
+{
+  return g_steal_fd (&self->fds[end]);
+}
+
+GLIB_AVAILABLE_STATIC_INLINE_IN_2_78
+static inline gboolean
+g_unix_pipe_close (GUnixPipe *self,
+                   GUnixPipeEnd end,
+                   GError **error)
+{
+  return g_clear_fd (&self->fds[end], error);
+}
+
+GLIB_AVAILABLE_STATIC_INLINE_IN_2_78
+static inline void
+g_unix_pipe_clear (GUnixPipe *self)
+{
+  /* Don't overwrite thread-local errno if closing the fd fails */
+  int errsv = errno;
+
+  if (!g_unix_pipe_close (self, G_UNIX_PIPE_END_READ, NULL))
+    {
+      /* ignore */
+    }
+
+  if (!g_unix_pipe_close (self, G_UNIX_PIPE_END_WRITE, NULL))
+    {
+      /* ignore */
+    }
+
+  errno = errsv;
+}
+
+G_DEFINE_AUTO_CLEANUP_CLEAR_FUNC (GUnixPipe, g_unix_pipe_clear)
+
+G_GNUC_END_IGNORE_DEPRECATIONS
 
 G_END_DECLS
 
