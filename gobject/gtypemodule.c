@@ -26,15 +26,13 @@
 
 
 /**
- * SECTION:gtypemodule
- * @short_description: Type loading modules
- * @see_also: #GTypePlugin, #GModule
- * @title: GTypeModule
+ * GTypeModule:
+ * @name: the name of the module
  *
- * #GTypeModule provides a simple implementation of the #GTypePlugin
+ * `GTypeModule` provides a simple implementation of the `GTypePlugin`
  * interface.
  *
- * The model of #GTypeModule is a dynamically loaded module which
+ * The model of `GTypeModule` is a dynamically loaded module which
  * implements some number of types and interface implementations.
  *
  * When the module is loaded, it registers its types and interfaces
@@ -57,10 +55,10 @@
  * module no longer needs to be loaded except for the type
  * implementations it contains, g_type_module_unuse() is called.
  *
- * #GTypeModule does not actually provide any implementation of module
+ * `GTypeModule` does not actually provide any implementation of module
  * loading and unloading. To create a particular module type you must
- * derive from #GTypeModule and implement the load and unload functions
- * in #GTypeModuleClass.
+ * derive from `GTypeModule` and implement the load and unload functions
+ * in `GTypeModuleClass`.
  */
 
 typedef struct _ModuleTypeInfo ModuleTypeInfo;
