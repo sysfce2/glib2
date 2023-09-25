@@ -302,3 +302,25 @@ and [method@GLib.HashTable.contains] are designed to be used when using `GHashTa
 `GHashTable` is not designed to be statically initialised with keys and values known at compile time.
 To build a static hash table, use a tool such as [gperf](https://www.gnu.org/software/gperf/).
 
+## Double-ended Queues
+
+The [struct@Glib.Queue[ structure and its associated functions provide a standard queue data structure.
+Internally, `GQueue` uses the same data structure as [struct@Glib.List] to store elements with the same
+complexity over insertion/deletion (O(1)) and access/search (O(n)) operations.
+
+The data contained in each element can be either integer values, by using one of the
+[Type Conversion Macros][glib-Type-Conversion-Macros], or simply pointers to any type of data.
+
+As with all other GLib data structures, `GQueue` is not thread-safe. For a thread-safe queue, use
+[struct@GLib.AsyncQueue].
+
+To create a new GQueue, use [method@GLib.Queue.new].
+
+To initialize a statically-allocated GQueue, use `G_QUEUE_INIT` or [method@GLib.Queue.init].
+
+To add elements, use [method@GLib.Queue.push_head], [method@GLib.Queue.push_head_linke],
+[method@GLib.Queue.push_tail] and [method@GLib.Queue.push_tail_link].
+
+To remove elements, use [method@GLib.Queue.pop_head] and [method@GLib.Queue.pop_tail].
+
+To free the entire queue, use [method@GLib.Queue.free].
