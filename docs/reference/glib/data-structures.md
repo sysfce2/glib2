@@ -143,3 +143,114 @@ g_byte_array_free (array, TRUE);
 
 See [struct@Glib.Bytes] if you are interested in an immutable object representing a
 sequence of bytes.
+
+## Singly-linked Lists
+
+The [struct@GLib.SList] structure and its associated functions provide a standard
+singly-linked list data structure. The benefit of this data structure is to provide
+insertion/deletion operations in O(1) complexity where access/search operations are
+in O(n). The benefit of `GSList` over [struct@GLib.List] (doubly-linked list) is that
+they are lighter in space as they only need to retain one pointer but it double the
+cost of the worst case access/search operations.
+
+Each element in the list contains a piece of data, together with a pointer which links
+to the next element in the list. Using this pointer it is possible to move through the
+list in one direction only (unlike the [double-linked lists][glib-Doubly-Linked-Lists],
+which allow movement in both directions).
+
+The data contained in each element can be either integer values, by
+using one of the [Type Conversion Macros][glib-Type-Conversion-Macros],
+or simply pointers to any type of data.
+
+Note that most of the #GSList functions expect to be passed a pointer to the first element
+in the list. The functions which insert elements return the new start of the list, which
+may have changed.
+
+There is no function to create a `GSList`. `NULL` is considered to be the empty list so you
+simply set a `GSList*` to `NULL`.
+
+To add elements, use [method@GLib.SList.append], [method@GLib.SList.prepend],
+[method@GLib.SList.insert] and [method@GLib.SList.insert_sorted].
+
+To remove elements, use [method@GLib.SList.remove].
+
+To find elements in the list use [method@GLib.SList.last], [method@GLib.SList.next],
+[method@GLib.SList.nth], [method@GLib.SList.nth_data], [method@GLib.SList.find] and
+[method@GLib.SList.find_custom].
+
+To find the index of an element use [method@GLib.SList.position] and [method@GLib.SList.index].
+
+To call a function for each element in the list use [method@GLib.SList.foreach].
+
+To free the entire list, use [method@GLib.SList.free].
+
+## Doubly-linked Lists
+
+The [struct@Glib.List[ structure and its associated functions provide a standard
+doubly-linked list data structure. The benefit of this data-structure is to provide
+insertion/deletion operations in O(1) complexity where access/search operations are in O(n).
+The benefit of `GList` over [struct@Glib.SList] (singly-linked list) is that the worst case
+on access/search operations is divided by two which comes at a cost in space as we need
+to retain two pointers in place of one.
+
+Each element in the list contains a piece of data, together with pointers which link to the
+previous and next elements in the list. Using these pointers it is possible to move through
+the list in both directions (unlike the singly-linked [GSList][glib-Singly-Linked-Lists],
+which only allows movement through the list in the forward direction).
+
+The doubly-linked list does not keep track of the number of items and does not keep track of
+both the start and end of the list. If you want fast access to both the start and the end of
+the list,  and/or the number of items in the list, use a [GQueue][glib-Double-ended-Queues] instead.
+
+The data contained in each element can be either integer values, by using one of the
+[Type Conversion Macros][glib-Type-Conversion-Macros], or simply pointers to any type of data.
+
+Note that most of the `GList` functions expect to be passed a pointer to the first element in the list.
+The functions which insert elements return the new start of the list, which may have changed.
+
+There is no function to create a `GList`. `NULL` is considered to be a valid, empty list so you simply
+set a `GList*` to `NULL` to initialize it.
+
+To add elements, use [method@GLib.List.append], [method@GLib.List.prepend],
+[method@GLib.List.insert] and [method@GLib.List.insert_sorted].
+
+To visit all elements in the list, use a loop over the list:
+
+```c
+GList *l;
+for (l = list; l != NULL; l = l->next)
+  {
+    // do something with l->data
+  }
+```
+
+To call a function for each element in the list, use [method@GLib.List.foreach].
+
+To loop over the list and modify it (e.g. remove a certain element) a while loop is more appropriate,
+for example:
+
+```c
+GList *l = list;
+while (l != NULL)
+  {
+    GList *next = l->next;
+    if (should_be_removed (l))
+      {
+        // possibly free l->data
+        list = g_list_delete_link (list, l);
+      }
+    l = next;
+  }
+```
+
+To remove elements, use [method@GLib.List.remove[.
+
+To navigate in a list, use [method@GLib.List.first], [method@GLib.List.last],
+[method@GLib.List.next], [method@GLib.List.previous].
+
+To find elements in the list use [method@GLib.List.nth], [method@GLib.List.nth_data],
+[method@GLib.List.find] and [method@GLib.List.find_custom].
+
+To find the index of an element use [method@GLib.List.position] and [method@GLib.List.index].
+
+To free the entire list, use [method@GLib.List.free] or [method@GLib.List.free_full].
