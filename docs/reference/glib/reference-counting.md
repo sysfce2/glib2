@@ -107,6 +107,7 @@ type without increasing the reference count, you can use `g_steal_pointer()`:
   add_person_to_database_no_ref (db, g_steal_pointer (&p));
 ```
 
+
 ## Thread safety
 
 The reference counting operations on data allocated using
@@ -159,3 +160,5 @@ my_data_struct_release (MyDataStruct *data)
 
 G_DEFINE_AUTOPTR_CLEANUP_FUNC (MyDataStruct, my_data_struct_release)
 ```
+
+The g_rc_box and g_atomic_rc_box APIs were introduced in GLib 2.58.
