@@ -13,22 +13,22 @@ automatically as elements are added.
 Array elements can be of any size (though all elements of one array are the same size),
 and the array can be automatically cleared to '0's and zero-terminated.
 
-To create a new array use [method@Glib.Array.new].
+To create a new array use [func@GLib.Array.new].
 
 To add elements to an array with a cost of O(n) at worst, use
-[methodd@GLib.Array.append_val],
-[method@GLib.Array.append_vals],
-[method@GLib.Array.prepend_val],
-[method@GLib.Array.prepend_vals],
-[method@GLib.Array.insert_val] and
-[method@GLib.Array.insert_vals].
+[func@GLib.array_append_val],
+[func@GLib.Array.append_vals],
+[func@GLib.array_prepend_val],
+[func@GLib.Array.prepend_vals],
+[func@GLib.array_insert_val] and
+[func@GLib.Array.insert_vals].
 
 To access an element of an array in O(1) (to read it or to write it),
-use [method@GLib.Array.index].
+use [func@GLib.array_index].
 
-To set the size of an array, use [method@GLib.Arrray.set_size].
+To set the size of an array, use [func@GLib.Array.set_size].
 
-To free an array, use [method@GLib.Array.unref] or [method@GLib.Array.free].
+To free an array, use [func@GLib.Array.unref] or [func@GLib.Array/free].
 
 All the sort functions are internally calling a quick-sort (or similar)
 function with an average cost of O(n log(n)) and a worst case cost of O(n^2).
@@ -69,20 +69,20 @@ element. This means that you should not rely on the index of particular
 elements remaining the same. You should also be careful when deleting
 elements while iterating over the array.
 
-To create a pointer array, use [method@GLib.PtrArray.new].
+To create a pointer array, use [func@GLib.PtrArray.new].
 
-To add elements to a pointer array, use [method@GLib.PtrArray.add].
+To add elements to a pointer array, use [func@GLib.PtrArray.add].
 
 To remove elements from a pointer array, use
-[method@GLib.PtrArray.remove],
-[method@GLib.PtrArray.remove_index] or
-[method@GLib.PtrArray.remove_index_fast].
+[func@GLib.PtrArray.remove],
+[func@GLib.PtrArray.remove_index] or
+[func@GLib.PtrArray.remove_index_fast].
 
-To access an element of a pointer array, use [method@GLib.PtrArray.index].
+To access an element of a pointer array, use [func@GLib.ptr_array_index].
 
-To set the size of a pointer array, use [method@GLib.PtrArray.set_size].
+To set the size of a pointer array, use [func@GLib.PtrArray.set_size].
 
-To free a pointer array, use [method@GLib.PtrArray.unref] or [method@GLib.PtrArray.free].
+To free a pointer array, use [func@GLib.PtrArray.unref] or [func@GLib.PtrArray.free].
 
 An example using a [struct@Glib.PtrArray]:
 
@@ -109,14 +109,14 @@ g_ptr_array_free (array, TRUE);
 {struct@Glib.ByteArray] is a mutable array of bytes based on [struct@Glib.Array],
 to provide arrays of bytes which grow automatically as elements are added.
 
-To create a new `GByteArray` use [method@GLib.ByteArray.new].
+To create a new `GByteArray` use [func@GLib.ByteArray.new].
 
 To add elements to a `GByteArray`, use
-[method@GLib.ByteArray.append] and [method@GLib.ByteArray.prepend].
+[func@GLib.ByteArray.append] and [func@GLib.ByteArray.prepend].
 
-To set the size of a `GByteArray`, use [method@GLib.ByteArray.set_size].
+To set the size of a `GByteArray`, use [func@GLib.ByteArray.set_size].
 
-To free a `GByteArray`, use [method@Glib.ByteArray.unref] or [method@Glib.ByteArray.free].
+To free a `GByteArray`, use [func@GLib.ByteArray.unref] or [func@GLib.ByteArray.free].
 
 An example for using a `GByteArray`:
 
@@ -169,20 +169,20 @@ may have changed.
 There is no function to create a `GSList`. `NULL` is considered to be the empty list so you
 simply set a `GSList*` to `NULL`.
 
-To add elements, use [method@GLib.SList.append], [method@GLib.SList.prepend],
-[method@GLib.SList.insert] and [method@GLib.SList.insert_sorted].
+To add elements, use [func@GLib.SList.append], [func@GLib.SList.prepend],
+[func@GLib.SList.insert] and [func@GLib.SList.insert_sorted].
 
-To remove elements, use [method@GLib.SList.remove].
+To remove elements, use [func@GLib.SList.remove].
 
-To find elements in the list use [method@GLib.SList.last], [method@GLib.SList.next],
-[method@GLib.SList.nth], [method@GLib.SList.nth_data], [method@GLib.SList.find] and
-[method@GLib.SList.find_custom].
+To find elements in the list use [func@GLib.SList.last], [func@GLib.slist_next],
+[func@GLib.SList.nth], [func@GLib.SList.nth_data], [func@GLib.SList.find] and
+[func@GLib.SList.find_custom].
 
-To find the index of an element use [method@GLib.SList.position] and [method@GLib.SList.index].
+To find the index of an element use [func@GLib.SList.position] and [func@GLib.SList.index].
 
-To call a function for each element in the list use [method@GLib.SList.foreach].
+To call a function for each element in the list use [func@GLib.SList.foreach].
 
-To free the entire list, use [method@GLib.SList.free].
+To free the entire list, use [func@GLib.SList.free].
 
 ## Doubly-linked Lists
 
@@ -211,8 +211,8 @@ The functions which insert elements return the new start of the list, which may 
 There is no function to create a `GList`. `NULL` is considered to be a valid, empty list so you simply
 set a `GList*` to `NULL` to initialize it.
 
-To add elements, use [method@GLib.List.append], [method@GLib.List.prepend],
-[method@GLib.List.insert] and [method@GLib.List.insert_sorted].
+To add elements, use [func@GLib.List.append], [func@GLib.List.prepend],
+[func@GLib.List.insert] and [func@GLib.List.insert_sorted].
 
 To visit all elements in the list, use a loop over the list:
 
@@ -224,7 +224,7 @@ for (l = list; l != NULL; l = l->next)
   }
 ```
 
-To call a function for each element in the list, use [method@GLib.List.foreach].
+To call a function for each element in the list, use [func@GLib.List.foreach].
 
 To loop over the list and modify it (e.g. remove a certain element) a while loop is more appropriate,
 for example:
@@ -243,17 +243,17 @@ while (l != NULL)
   }
 ```
 
-To remove elements, use [method@GLib.List.remove[.
+To remove elements, use [func@GLib.List.remove[.
 
-To navigate in a list, use [method@GLib.List.first], [method@GLib.List.last],
-[method@GLib.List.next], [method@GLib.List.previous].
+To navigate in a list, use [func@GLib.List.first], [func@GLib.List.last],
+[func@GLib.list_next], [func@GLib.list_previous].
 
-To find elements in the list use [method@GLib.List.nth], [method@GLib.List.nth_data],
-[method@GLib.List.find] and [method@GLib.List.find_custom].
+To find elements in the list use [func@GLib.List.nth], [func@GLib.List.nth_data],
+[func@GLib.List.find] and [func@GLib.List.find_custom].
 
-To find the index of an element use [method@GLib.List.position] and [method@GLib.List.index].
+To find the index of an element use [func@GLib.List.position] and [func@GLib.List.index].
 
-To free the entire list, use [method@GLib.List.free] or [method@GLib.List.free_full].
+To free the entire list, use [func@GLib.List.free] or [func@GLib.List.free_full].
 
 
 ## Hash Tables
@@ -266,7 +266,7 @@ keys/values, table resize, etc.).
 Note that neither keys nor values are copied when inserted into the `GHashTable`,
 so they must exist for the lifetime of the `GHashTable`. This means that the use
 of static strings is OK, but temporary strings (i.e. those created in buffers and those
-returned by GTK widgets) should be copied with [function@GLib.strdup] before being inserted.
+returned by GTK widgets) should be copied with [func@GLib.strdup] before being inserted.
 
 If keys or values are dynamically allocated, you must be careful to ensure that they are freed
 when they are removed from the `GHashTable`, and also when they are overwritten by
@@ -274,30 +274,30 @@ new insertions into the `GHashTable`. It is also not advisable to mix static str
 and dynamically-allocated strings in a [struct@GLib.HashTable], because it then becomes difficult
 to determine whether the string should be freed.
 
-To create a `GHashTable`, use [method@GLib.HashTable.new].
+To create a `GHashTable`, use [func@GLib.HashTable.new].
 
-To insert a key and value into a `GHashTable`, use [method@GLib.HashTable.insert].
+To insert a key and value into a `GHashTable`, use [func@GLib.HashTable.insert].
 
-To look up a value corresponding to a given key, use [method@GLib.HashTable.lookup] or
-[method@Glib.HashTable.lookup_extended].
+To look up a value corresponding to a given key, use [func@GLib.HashTable.lookup] or
+[func@GLib.HashTable.lookup_extended].
 
-[method@GLib.HashTable.lookup_extended] can also be used to simply check if a key is present
+[func@GLib.HashTable.lookup_extended] can also be used to simply check if a key is present
 in the hash table.
 
-To remove a key and value, use [method@GLib.HashTable.remove].
+To remove a key and value, use [func@GLib.HashTable.remove].
 
-To call a function for each key and value pair use [method@GLib.HashTable.foreach] or use
+To call a function for each key and value pair use [func@GLib.HashTable.foreach] or use
 an iterator to iterate over the key/value pairs in the hash table, see [struct@GLib.HashTableIter].
 The iteration order of a hash table is not defined, and you must not rely on iterating over
 keys/values in the same order as they were inserted.
 
-To destroy a `GHashTable` use [method@GLib.HashTable.unref] or [method@GLib.HashTable.destroy].
+To destroy a `GHashTable` use [func@GLib.HashTable.unref] or [func@GLib.HashTable.destroy].
 
 A common use-case for hash tables is to store information about a set of keys, without associating any
 particular value with each key. `GHashTable` optimizes one way of doing so: If you store only
 key-value pairs where key == value, then `GHashTable` does not allocate memory to store the values,
-which can be a considerable space saving, if your set is large. The functions [method@GLib.HashTable.add]
-and [method@GLib.HashTable.contains] are designed to be used when using `GHashTable` this way.
+which can be a considerable space saving, if your set is large. The functions [func@GLib.HashTable.add]
+and [func@GLib.HashTable.contains] are designed to be used when using `GHashTable` this way.
 
 `GHashTable` is not designed to be statically initialised with keys and values known at compile time.
 To build a static hash table, use a tool such as [gperf](https://www.gnu.org/software/gperf/).
@@ -314,11 +314,11 @@ The data contained in each element can be either integer values, by using one of
 As with all other GLib data structures, `GQueue` is not thread-safe. For a thread-safe queue, use
 [struct@GLib.AsyncQueue].
 
-To create a new GQueue, use [method@GLib.Queue.new].
+To create a new GQueue, use [func@GLib.Queue.new].
 
 To initialize a statically-allocated GQueue, use `G_QUEUE_INIT` or [method@GLib.Queue.init].
 
-To add elements, use [method@GLib.Queue.push_head], [method@GLib.Queue.push_head_linke],
+To add elements, use [method@GLib.Queue.push_head], [method@GLib.Queue.push_head_link],
 [method@GLib.Queue.push_tail] and [method@GLib.Queue.push_tail_link].
 
 To remove elements, use [method@GLib.Queue.pop_head] and [method@GLib.Queue.pop_tail].
@@ -337,7 +337,7 @@ simultaneously from multiple threads without explicit locking and they bring the
 reference counting. This is because the nature of an asynchronous queue is that it will always
 be used by at least 2 concurrent threads.
 
-For using an asynchronous queue you first have to create one with [method@GLib.AsyncQueue.new].
+For using an asynchronous queue you first have to create one with [func@GLib.AsyncQueue.new].
 [struct@GLib.AsyncQueue] structs are reference counted, use [method@GLib.AsyncQueue.ref] and
 [method@GLib.AsyncQueue.unref] to manage your references.
 
@@ -347,7 +347,7 @@ to push the message to the queue.
 A thread which is expecting messages from an asynchronous queue simply calls [method@GLib.AsyncQueue.pop]
 for that queue. If no message is available in the queue at that point, the thread is now put to sleep
 until a message arrives. The message will be removed from the queue and returned. The functions
-[method@GLib.AsyncQueue.try_pop[ and [method@GLib.AsyncQueue.timeout_pop] can be used to only check
+[method@GLib.AsyncQueue.try_pop] and [method@GLib.AsyncQueue.timeout_pop] can be used to only check
 for the presence of messages or to only wait a certain time for messages respectively.
 
 For almost every function there exist two variants, one that locks the queue and one that doesn't.
@@ -368,7 +368,7 @@ pairs optimized for searching and traversing in order. This means that most of t
 search, insertion, deletion, ...) on `GTree` are O(log(n)) in average and O(n) in worst case for time
 complexity. But, note that maintaining a balanced sorted `GTree` of n elements is done in time O(n log(n)).
 
-To create a new `GTree` use [method@GLib.Tree.new].
+To create a new `GTree` use [ctor@GLib.Tree.new].
 
 To insert a key/value pair into a `GTree` use [method@GLib.Tree.insert] (O(n log(n))).
 
@@ -390,21 +390,21 @@ To destroy a `GTree`, use [method@GLib.Tree.destroy].
 The [struct@GLib.Node] struct and its associated functions provide a N-ary tree
 data structure, where nodes in the tree can contain arbitrary data.
 
-To create a new tree use [method@GLib.Node.new].
+To create a new tree use [func@GLib.Node.new].
 
 To insert a node into a tree use [method@GLib.Node.insert], [method@GLib.Node.insert_before],
-[method@GLib.Node.append] and [method@GLib.Node.prepend],
+[func@GLib.node_append] and [method@GLib.Node.prepend],
 
-To create a new node and insert it into a tree use [method@GLib.Node.insert_data],
-[method@GLib.Node.insert_data_after], [method@GLib.Node.insert_data_before],
-[method@GLib.Node.append_data] and [method@GLib.Node.prepend_data].
+To create a new node and insert it into a tree use [func@GLib.node_insert_data],
+[func@GLib.node_insert_data_after], [func@GLib.node_insert_data_before],
+[func@GLib.node_append_data] and [func@GLib.node_prepend_data].
 
 To reverse the children of a node use [method@GLib.Node.reverse_children].
 
-To find a node use [method@GLib.Node.root], [method@GLib.Node.find], [method@GLib.Node.find_child],
-[method@GLib.Node.child_index], [method@GLib.Node.child_position], [method@GLib.Node.first_child],
+To find a node use [method@GLib.Node.get_root], [method@GLib.Node.find], [method@GLib.Node.find_child],
+[method@GLib.Node.child_index], [method@GLib.Node.child_position], [func@GLib.node_first_child],
 [method@GLib.Node.last_child], [method@GLib.Node.nth_child], [method@GLib.Node.first_sibling],
-[method@GLib.Node.prev_sibling], [method@GLib.Node.next_sibling] or [method@GLib.Node.last_sibling].
+[func@GLib.node_prev_sibling], [func@GLib.node_next_sibling] or [method@GLib.Node.last_sibling].
 
 To get information about a node or tree use `G_NODE_IS_LEAF()`,
 `G_NODE_IS_ROOT()`, [method@GLib.Node.depth], [method@GLib.Node.n_nodes],
@@ -429,17 +429,17 @@ represents a position between two elements of the sequence. For example, the "be
 the gap immediately before the first element of the sequence, and the "end" iterator represents the gap
 immediately after the last element. In an empty sequence, the begin and end iterators are the same.
 
-Some methods on `GSequence` operate on ranges of items. For example [method@GLib.Sequence.foreach_range]
+Some methods on `GSequence` operate on ranges of items. For example [func@GLib.Sequence.foreach_range]
 will call a user-specified function on each element with the given range. The range is delimited by the
 gaps represented by the passed-in iterators, so if you pass in the begin and end iterators, the range in
 question is the entire sequence.
 
-The function [method@GLib.Sequence.get] is used with an iterator to access the element immediately following
+The function [func@GLib.Sequence.get] is used with an iterator to access the element immediately following
 the gap that the iterator represents. The iterator is said to "point" to that element.
 
 Iterators are stable across most operations on a `GSequence`. For example an iterator pointing to some element
 of a sequence will continue to point to that element even after the sequence is sorted. Even moving an element
-to another sequence using for example [method@GLib.Sequence.move_range] will not invalidate the iterators pointing
+to another sequence using for example [func@GLib.Sequence.move_range] will not invalidate the iterators pointing
 to it. The only operation that will invalidate an iterator is when the element it points to is removed from
 any sequence.
 
