@@ -33,17 +33,13 @@
 
 
 /**
- * SECTION:gconverteroutputstream
- * @short_description: Converter Output Stream
- * @include: gio/gio.h
- * @see_also: #GOutputStream, #GConverter
+ * GConverterOutputStream:
  *
- * Converter output stream implements #GOutputStream and allows
+ * Converter output stream implements `GOutputStream` and allows
  * conversion of data of various types during reading.
  *
- * As of GLib 2.34, #GConverterOutputStream implements
- * #GPollableOutputStream.
- **/
+ * As of GLib 2.34, `GConverterOutputStream` implements `GPollableOutputStream`
+ */
 
 #define INITIAL_BUFFER_SIZE 4096
 
