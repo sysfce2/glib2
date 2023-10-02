@@ -211,12 +211,23 @@ gssize                 g_socket_receive                 (GSocket                
 							 GCancellable            *cancellable,
 							 GError                 **error);
 GIO_AVAILABLE_IN_ALL
+GBytes *               g_socket_receive_bytes           (GSocket                 *socket,
+                                                         gsize                    size,
+                                                         GCancellable            *cancellable,
+                                                         GError                 **error);
+GIO_AVAILABLE_IN_ALL
 gssize                 g_socket_receive_from            (GSocket                 *socket,
 							 GSocketAddress         **address,
 							 gchar                   *buffer,
 							 gsize                    size,
 							 GCancellable            *cancellable,
 							 GError                 **error);
+GIO_AVAILABLE_IN_ALL
+GBytes *               g_socket_receive_bytes_from      (GSocket                 *socket,
+                                                         GSocketAddress         **address,
+                                                         gsize                    size,
+                                                         GCancellable            *cancellable,
+                                                         GError                 **error);
 GIO_AVAILABLE_IN_ALL
 gssize                 g_socket_send                    (GSocket                 *socket,
 							 const gchar             *buffer,

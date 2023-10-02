@@ -3313,6 +3313,76 @@ g_socket_receive_with_timeout (GSocket       *socket,
 }
 
 /**
+ * g_socket_receive_bytes: (rename-to g_socket_receive)
+ * @socket: a #GSocket
+ * @size: the number of bytes you want to read from the socket
+ * @cancellable: (nullable): a %GCancellable or %NULL
+ * @error: return location for a #GError, or %NULL
+ *
+ * Receives data (up to @size bytes) from a socket.
+ *
+ * This function is mainly used by connection-oriented sockets; it is
+ * identical to g_socket_receive_from() with an address set to %NULL.
+ *
+ * For %G_SOCKET_TYPE_DATAGRAM and %G_SOCKET_TYPE_SEQPACKET sockets,
+ * g_socket_receive() will always read either 0 or 1 complete messages from
+ * the socket. If the received message is too large to fit in @buffer, then
+ * the data beyond @size bytes will be discarded, without any explicit
+ * indication that this has occurred.
+ *
+ * For %G_SOCKET_TYPE_STREAM sockets, g_socket_receive() can return any
+ * number of bytes, up to @size. If more than @size bytes have been
+ * received, the additional data will be returned in future calls to
+ * g_socket_receive().
+ *
+ * If the socket is in blocking mode the call will block until there
+ * is some data to receive, the connection is closed, or there is an
+ * error. If there is no data available and the socket is in
+ * non-blocking mode, a %G_IO_ERROR_WOULD_BLOCK error will be
+ * returned. To be notified when data is available, wait for the
+ * %G_IO_IN condition.
+ *
+ * Returns: (nullable) (transfer full): a bytes buffer containing the
+ *   received bytes, or %NULL on error
+ *
+ * Since: 2.80
+ */
+GBytes *
+g_socket_receive_bytes (GSocket       *socket,
+                        gsize          size,
+                        GCancellable  *cancellable,
+                        GError       **error)
+{
+  guint8 *data;
+  gssize res;
+  GBytes *buf;
+
+  g_return_val_if_fail (G_IS_SOCKET (socket), NULL);
+  g_return_val_if_fail (cancellable == NULL || G_IS_CANCELLABLE (cancellable), NULL);
+  g_return_val_if_fail (error == NULL || *error != NULL, NULL);
+
+  data = g_new0 (guint8, size);
+  res = g_socket_receive (socket, (gchar *) data, size, cancellable, error);
+  if (res < 0)
+    {
+      g_free (data);
+      return NULL;
+    }
+
+  if ((gsize) res == size)
+    {
+      buf = g_bytes_new_take (data, res);
+    }
+  else
+    {
+      buf = g_bytes_new (data, res);
+      g_free (data);
+    }
+
+  return buf;
+}
+
+/**
  * g_socket_receive:
  * @socket: a #GSocket
  * @buffer: (array length=size) (element-type guint8) (out caller-allocates):
@@ -3391,6 +3461,65 @@ g_socket_receive_with_blocking (GSocket       *socket,
 {
   return g_socket_receive_with_timeout (socket, (guint8 *) buffer, size,
                                         blocking ? -1 : 0, cancellable, error);
+}
+
+/**
+ * g_socket_receive_bytes_from: (rename-to g_socket_receive_from)
+ * @socket: a #GSocket
+ * @address: (out) (optional): return location for a #GSocketAddress
+ * @size: the number of bytes you want to read from the socket
+ * @cancellable: (nullable): a #GCancellable, or %NULL
+ * @error: return location for a #GError, or %NULL
+ *
+ * Receive data (up to @size bytes) from a socket.
+ *
+ * If @address is non-%NULL then @address will be set equal to the
+ * source address of the received packet.
+ *
+ * The @address is owned by the caller.
+ *
+ * See g_socket_receive() for additional information.
+ *
+ * Returns: (nullable) (transfer full): a bytes buffer containing the
+ *   received bytes, or %NULL on error
+ *
+ * Since: 2.80
+ */
+GBytes *
+g_socket_receive_bytes_from (GSocket         *socket,
+                             GSocketAddress **address,
+                             gsize            size,
+                             GCancellable    *cancellable,
+                             GError         **error)
+{
+  guint8 *data;
+  gssize res;
+  GBytes *buf;
+
+  g_return_val_if_fail (G_IS_SOCKET (socket), NULL);
+  g_return_val_if_fail (address == NULL || *address != NULL, NULL);
+  g_return_val_if_fail (cancellable == NULL || G_IS_CANCELLABLE (cancellable), NULL);
+  g_return_val_if_fail (error == NULL || *error != NULL, NULL);
+
+  data = g_new0 (guint8, size);
+  res = g_socket_receive_from (socket, address, (gchar *) data, size, cancellable, error);
+  if (res < 0)
+    {
+      g_free (data);
+      return NULL;
+    }
+
+  if ((gsize) res == size)
+    {
+      buf = g_bytes_new_take (data, res);
+    }
+  else
+    {
+      buf = g_bytes_new (data, res);
+      g_free (data);
+    }
+
+  return buf;
 }
 
 /**
